@@ -60,7 +60,7 @@ scripts/deploy-timeweb.sh
 Сменить пароль админки — заменить `admin_pass_hash` в `config.php` на вывод
 `php -r 'echo password_hash("новый-пароль", PASSWORD_DEFAULT);'`. Образец — `php/config.example.php`.
 
-Когда на домене будет SSL-сертификат, раскомментируйте перевод на https в `public/.htaccess` и выложите заново.
+Сайт работает по https (сертификат Let's Encrypt в панели Таймвеба): `.htaccess` переводит http и www на https://pro-orgazm.ru.
 
 ### Вариант 1 — всё на одном Node-хостинге (проще всего)
 
