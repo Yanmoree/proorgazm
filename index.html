@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0709" />
+    <title>ProOrgazm — салон эротического массажа для женщин в Москве</title>
+    <meta name="description" content="Салон эротического массажа для женщин в Москве: ул. Плющиха, 27, м. Смоленская. 6 программ, опытные мастера, выезд, полная конфиденциальность. Работаем 24/7." />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href="/images/logo-256.webp" as="image" type="image/webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Onest:wght@300;400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet" />
+
+    <!-- Экран загрузки: встроен в страницу, чтобы появиться мгновенно, ещё до загрузки скриптов -->
+    <style>
+      html { background: #0a0709; }
+      .po-loader {
+        position: fixed; inset: 0; z-index: 1000;
+        display: grid; place-items: center;
+        background: radial-gradient(60% 50% at 50% 45%, rgba(255, 61, 154, 0.16), transparent 70%), #0a0709;
+        color: #fbf3f7;
+        transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), filter 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.9s;
+      }
+      .po-loader.is-done { opacity: 0; filter: blur(12px); visibility: hidden; pointer-events: none; }
+      .po-loader__inner { display: grid; justify-items: center; gap: 22px; transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+      .po-loader.is-done .po-loader__inner { transform: scale(1.06); }
+
+      .po-loader__mark { position: relative; width: 128px; height: 128px; display: grid; place-items: center; }
+      .po-loader__mark img {
+        width: 112px; height: 112px; object-fit: contain;
+        opacity: 0; transform: scale(0.85);
+        animation: po-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards, po-breathe 2.8s ease-in-out 1.1s infinite;
+      }
+      .po-loader__mark::before, .po-loader__mark::after {
+        content: ''; position: absolute; inset: -14px; border-radius: 50%;
+        border: 1px solid rgba(255, 85, 170, 0.35); opacity: 0;
+        animation: po-ring 2.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s infinite;
+      }
+      .po-loader__mark::after { animation-delay: 1.7s; }
+
+      .po-loader__name {
+        font-family: 'Playfair Display', Georgia, serif; font-size: clamp(30px, 6vw, 44px);
+        letter-spacing: 0.01em; display: flex; overflow: hidden; padding: 0.06em 0.14em 0.22em; line-height: 1.15;
+      }
+      .po-loader__name span { display: inline-block; opacity: 0; transform: translateY(100%); animation: po-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+      .po-loader__name .pink {
+        background: linear-gradient(100deg, #ffe0ef 0%, #ffaad3 35%, #ff55aa 70%, #ff8cc6 100%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .po-loader__tag {
+        font-family: 'Onest', system-ui, sans-serif; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+        color: #ff9ccc; opacity: 0; animation: po-fade 0.8s ease 1.1s forwards; text-align: center; padding: 0 16px;
+      }
+      .po-loader__bar { width: 160px; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); overflow: hidden; opacity: 0; animation: po-fade 0.6s ease 0.6s forwards; }
+      .po-loader__bar i {
+        display: block; height: 100%; width: 40%; border-radius: inherit;
+        background: linear-gradient(90deg, transparent, #ff55aa, transparent);
+        animation: po-slide 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+
+      /* Повторный заход в той же вкладке: та же анимация, но быстрее */
+      .po-loader.is-quick .po-loader__mark img { animation-duration: 0.6s, 2.8s; animation-delay: 0s, 0.6s; }
+      .po-loader.is-quick .po-loader__name span { animation-duration: 0.5s; }
+      .po-loader.is-quick .po-loader__tag { animation-delay: 0.5s; animation-duration: 0.5s; }
+      .po-loader.is-quick .po-loader__bar { animation-delay: 0.3s; }
+
+      @keyframes po-in { to { opacity: 1; transform: scale(1); } }
+      @keyframes po-breathe { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(255, 85, 170, 0)); } 50% { transform: scale(1.04); filter: drop-shadow(0 0 18px rgba(255, 85, 170, 0.45)); } }
+      @keyframes po-ring { 0% { opacity: 0.7; transform: scale(0.8); } 100% { opacity: 0; transform: scale(1.5); } }
+      @keyframes po-up { to { opacity: 1; transform: none; } }
+      @keyframes po-fade { to { opacity: 1; } }
+      @keyframes po-slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+
+      @media (prefers-reduced-motion: reduce) {
+        .po-loader__mark img, .po-loader__name span, .po-loader__tag, .po-loader__bar { animation: none; opacity: 1; transform: none; }
+        .po-loader__mark::before, .po-loader__mark::after, .po-loader__bar i { animation: none; }
+        .po-loader, .po-loader__inner { transition-duration: 0.3s; }
+        .po-loader.is-done { filter: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="po-loader" id="po-loader" role="status" aria-label="Загрузка сайта">
+      <div class="po-loader__inner">
+        <div class="po-loader__mark"><img src="/images/logo-256.webp" alt="" width="112" height="112" /></div>
+        <div class="po-loader__name" aria-hidden="true"></div>
+        <div class="po-loader__tag">Салон эротического массажа для женщин</div>
+        <div class="po-loader__bar"><i></i></div>
+      </div>
+    </div>
+    <script>
+      // Название по буквам; в админке загрузчик не нужен
+      (function () {
+        var el = document.getElementById('po-loader')
+        if (location.pathname.indexOf('/admin') === 0) { el.remove(); return }
+        var quick = false
+        try { quick = sessionStorage.getItem('po-loader-seen') === '1' } catch (e) {}
+        if (quick) el.classList.add('is-quick')
+        // Отсчёт длительности — с момента, когда экран загрузки появился
+        window.__poLoaderStart = performance.now()
+        var name = el.querySelector('.po-loader__name')
+        'ProOrgazm'.split('').forEach(function (ch, i) {
+          var s = document.createElement('span')
+          s.textContent = ch
+          if (i >= 3) s.className = 'pink'
+          s.style.animationDelay = (quick ? 0.15 + i * 0.03 : 0.35 + i * 0.05) + 's'
+          name.appendChild(s)
+        })
+      })()
+    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
