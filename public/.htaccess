@@ -1,0 +1,47 @@
+# Apache на обычном хостинге (Таймвеб):
+#  /api/*      → api/index.php (PHP-версия API, база SQLite вне папки сайта)
+#  файлы       → как есть
+#  остальное   → legacy.php: 301 со старых адресов, иначе index.html (страницу выбирает React Router)
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Когда на домене будет SSL-сертификат, раскомментируйте перевод на https и без www:
+  #   RewriteCond %{HTTPS} off [OR]
+  #   RewriteCond %{HTTP_HOST} ^www\. [NC]
+  #   RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+  #   RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # Заголовок Authorization для PHP (вход в админку)
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+  RewriteRule ^api(/.*)?$ api/index.php [L,QSA]
+
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^(uploads|assets|images|content)/ - [R=404,L]
+  RewriteRule ^ legacy.php [L]
+</IfModule>
+
+# Служебные файлы не отдаём
+<FilesMatch "^(lib\.php|legacy-map\.json)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?|webp|avif|png|jpe?g|svg|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>

@@ -45,6 +45,23 @@ node scripts/hash-password.mjs 'новый-пароль'
 
 ## Деплой
 
+### Боевой сайт: pro-orgazm.ru на хостинге Таймвеб (PHP)
+
+На обычном хостинге Таймвеба нет Node.js, поэтому там работает PHP-версия API из папки `php/`
+(те же адреса `/api/...`, та же база SQLite). Обновить сайт:
+
+```bash
+scripts/deploy-timeweb.sh
+```
+
+Скрипт собирает фронтенд, добавляет PHP-API и заливает всё по SSH в `~/pro-orgazm.ru/public_html`.
+Фото из админки (`public_html/uploads`), база (`~/pro-orgazm.ru/data/proorgazm.db`) и настройки
+(`~/pro-orgazm.ru/config.php`: логин и хеш пароля) при обновлении не трогаются, в репозиторий не попадают.
+Сменить пароль админки — заменить `admin_pass_hash` в `config.php` на вывод
+`php -r 'echo password_hash("новый-пароль", PASSWORD_DEFAULT);'`. Образец — `php/config.example.php`.
+
+Когда на домене будет SSL-сертификат, раскомментируйте перевод на https в `public/.htaccess` и выложите заново.
+
 ### Вариант 1 — всё на одном Node-хостинге (проще всего)
 
 VPS, Railway, Timeweb Cloud и т.п.: `npm install && npm start`. Сайт, API и админка на одном домене,
