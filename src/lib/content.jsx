@@ -31,7 +31,6 @@ export function ContentProvider({ children }) {
     api('/content')
       .then((c) => {
         setContent(c)
-        if (c.settings?.seo?.title) document.title = c.settings.seo.title
       })
       .catch(() => { /* остаёмся на встроенном контенте */ })
   }, [])

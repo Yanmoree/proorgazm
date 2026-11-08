@@ -4,6 +4,7 @@ import { LeadForm } from '../components/Forms.jsx'
 import MapEmbed from '../components/MapEmbed.jsx'
 import { useSite } from '../lib/content.jsx'
 import { TelegramIcon, WhatsAppIcon, MaxIcon } from '../components/Icons.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 const makeCards = (contacts) => [
   { label: 'Телефон', value: contacts.phone, href: contacts.phoneHref },
@@ -13,7 +14,8 @@ const makeCards = (contacts) => [
 ]
 
 export default function Contacts() {
-  const { DIKIDI, contacts } = useSite()
+  const { DIKIDI, contacts, settings } = useSite()
+  useSeo(pageSeo('contacts', settings))
   const cards = makeCards(contacts)
   return (
     <>

@@ -29,9 +29,9 @@ adminApi.get('/me', (req, res) => res.json({ ok: true }))
 // ---------- Контент ----------
 
 const FIELDS = {
-  massages: { title: 120, duration: 40, price: 40, tag: 30, short: 400, description: 8000, options: 2000, booking: 500, image: 300, gallery: 'urls', faq: 'faq', titleFirst: 'bool' },
-  masters: { name: 120, role: 60, exp: 30, age: 20, height: 20, weight: 20, bio: 8000, booking: 500, image: 300, traits: 'list', programs: 'list', gallery: 'urls', faq: 'faq' },
-  articles: { title: 200, category: 60, read: 20, date: 40, excerpt: 500, body: 50000, image: 300, faq: 'faq' },
+  massages: { title: 120, duration: 40, price: 40, tag: 30, short: 400, description: 8000, options: 2000, booking: 500, image: 300, gallery: 'urls', faq: 'faq', titleFirst: 'bool', seoTitle: 200, seoDescription: 400 },
+  masters: { name: 120, role: 60, exp: 30, age: 20, height: 20, weight: 20, bio: 8000, booking: 500, image: 300, traits: 'list', programs: 'list', gallery: 'urls', faq: 'faq', seoTitle: 200, seoDescription: 400 },
+  articles: { title: 200, category: 60, read: 20, date: 40, excerpt: 500, body: 50000, image: 300, faq: 'faq', seoTitle: 200, seoDescription: 400 },
 }
 
 const pick = (collection, body) => {

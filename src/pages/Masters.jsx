@@ -4,6 +4,7 @@ import { MasterCard } from '../components/Cards.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import Faq from '../components/Faq.jsx'
 import { useSite } from '../lib/content.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 const reqs = [
   ['Мастерство', 'Владение техниками массажа и регулярное обучение'],
@@ -13,7 +14,8 @@ const reqs = [
 ]
 
 export default function Masters() {
-  const { masters, DIKIDI_TRAINING, faq } = useSite()
+  const { masters, DIKIDI_TRAINING, faq, settings } = useSite()
+  useSeo(pageSeo('masters', settings))
   return (
     <>
       <PageHero

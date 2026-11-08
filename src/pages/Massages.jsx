@@ -4,9 +4,11 @@ import { MassageCard } from '../components/Cards.jsx'
 import CtaBand from '../components/CtaBand.jsx'
 import Faq from '../components/Faq.jsx'
 import { useSite } from '../lib/content.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 export default function Massages() {
-  const { massages, faq } = useSite()
+  const { massages, faq, settings } = useSite()
+  useSeo(pageSeo('massages', settings))
   return (
     <>
       <PageHero

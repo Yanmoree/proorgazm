@@ -1,9 +1,11 @@
 import PageHero from '../components/PageHero.jsx'
 import { useSite } from '../lib/content.jsx'
 import { openCookieSettings } from '../lib/consent.js'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 export default function Privacy() {
-  const { contacts } = useSite()
+  const { contacts, settings } = useSite()
+  useSeo(pageSeo('privacy', settings))
   return (
     <>
       <PageHero eyebrow="Документы" title="Политика" accent="конфиденциальности" crumbs={[{ label: 'Политика конфиденциальности' }]} />

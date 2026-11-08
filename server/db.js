@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { seed, migrateV2, migrateV3, migrateV4, migrateV5, migrateV6 } from './seed.js'
+import { seed, migrateV2, migrateV3, migrateV4, migrateV5, migrateV6, migrateV7 } from './seed.js'
 
 const here = dirname(fileURLToPath(import.meta.url))
 export const DB_PATH = process.env.DB_PATH || join(here, 'data', 'proorgazm.db')
@@ -70,7 +70,7 @@ db.exec(`
 `)
 
 db.exec('CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT)')
-const SCHEMA_VERSION = 6
+const SCHEMA_VERSION = 7
 const empty = db.prepare('SELECT COUNT(*) AS n FROM items').get().n === 0
 const version = Number(db.prepare("SELECT value FROM meta WHERE key = 'version'").get()?.value || 1)
 if (empty) seed(db)
@@ -80,6 +80,7 @@ else {
   if (version < 4) migrateV4(db)
   if (version < 5) migrateV5(db)
   if (version < 6) migrateV6(db)
+  if (version < 7) migrateV7(db)
 }
 db.prepare("INSERT INTO meta (key, value) VALUES ('version', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value").run(String(SCHEMA_VERSION))
 

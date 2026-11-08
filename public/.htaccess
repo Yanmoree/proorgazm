@@ -1,9 +1,11 @@
 # Apache на обычном хостинге (Таймвеб):
 #  /api/*      → api/index.php (PHP-версия API, база SQLite вне папки сайта)
 #  файлы       → как есть
-#  остальное   → legacy.php: 301 со старых адресов, иначе index.html (страницу выбирает React Router)
+#  /sitemap.xml → sitemap.php (собирается из базы)
+#  остальное   → legacy.php: 301 со старых адресов, иначе index.html с мета-тегами страницы (код 404 для несуществующих)
 Options -Indexes
-DirectoryIndex index.html
+# Главная тоже через legacy.php — чтобы подставить title, description и canonical
+DirectoryIndex legacy.php index.html
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
@@ -21,6 +23,7 @@ DirectoryIndex index.html
   RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
   RewriteRule ^api(/.*)?$ api/index.php [L,QSA]
+  RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d

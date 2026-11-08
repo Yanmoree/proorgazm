@@ -9,11 +9,13 @@ import { useSite } from '../lib/content.jsx'
 import NotFound from './NotFound.jsx'
 import RichText from '../components/RichText.jsx'
 import Faq from '../components/Faq.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 export default function MasterPage() {
   const { masters, reviews, massages } = useSite()
   const { slug } = useParams()
   const m = masters.find((x) => x.slug === slug)
+  useSeo(m ? itemSeo('masters', m) : {})
   if (!m) return <NotFound />
   const first = m.name.split(' ')[0]
   const myReviews = reviews.filter((r) => r.master === first)

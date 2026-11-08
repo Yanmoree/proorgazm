@@ -7,6 +7,8 @@ import { useSite } from '../lib/content.jsx'
 import NotFound from './NotFound.jsx'
 import RichText from '../components/RichText.jsx'
 import Faq from '../components/Faq.jsx'
+import { dk } from '../data/site.js'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 // Шаблонное наполнение — одинаковая структура для всех 6 программ
 const stages = [
@@ -18,17 +20,20 @@ const stages = [
 
 const included = ['Беседа с мастером до сеанса', 'Ароматические свечи и лепестки роз', 'Массажные масла на ваш выбор', 'Спокойная музыка и мягкий свет', 'Душ, халат, полотенца', 'В салоне или с выездом к вам']
 
-// «90 минут | 24 000 ₽» по строке на вариант
-const parseOptions = (text = '') =>
+// По строке на вариант: «90 минут | 24 000 ₽ | 7049205». Третья часть — номер услуги DIKIDI или ссылка
+// на запись именно этой длительности; без неё кнопка ведёт на общую ссылку программы.
+const parseOptions = (text = '', fallback) =>
   text.split('\n').map((l) => l.split('|').map((s) => s.trim())).filter(([d, p]) => d && p)
+    .map(([d, p, link]) => ({ d, p, href: /^\d+$/.test(link || '') ? dk(link) : /^https:\/\//.test(link || '') ? link : fallback }))
 
 export default function MassagePage() {
   const { massages } = useSite()
   const { slug } = useParams()
   const m = massages.find((x) => x.slug === slug)
+  useSeo(m ? itemSeo('massages', m) : {})
   if (!m) return <NotFound />
   const others = massages.filter((x) => x.slug !== slug).slice(0, 3)
-  const options = parseOptions(m.options)
+  const options = parseOptions(m.options, m.booking)
 
   return (
     <>
@@ -41,8 +46,16 @@ export default function MassagePage() {
         <div className="mp-hero__info">
           <div className="mp-hero__stat glass"><small>Длительность</small><strong className="display">{m.duration}</strong></div>
           <div className="mp-hero__stat glass"><small>Стоимость</small><strong className="display">{m.price}</strong></div>
-          <a href={m.booking} target="_blank" rel="noreferrer" data-track={m.title} className="btn btn--primary">Записаться онлайн <span className="arrow">→</span></a>
+          {options.length === 0 && <a href={m.booking} target="_blank" rel="noreferrer" data-track={m.title} className="btn btn--primary">Записаться онлайн <span className="arrow">→</span></a>}
         </div>
+        {options.length > 0 && (
+          <div className="mp-hero__book">
+            <small className="muted">Записаться онлайн:</small>
+            {options.map((o) => (
+              <a key={o.d} href={o.href} target="_blank" rel="noreferrer" data-track={`${m.title} · ${o.d}`} className="btn btn--primary btn--sm">{o.d}</a>
+            ))}
+          </div>
+        )}
       </PageHero>
 
 
@@ -78,7 +91,13 @@ export default function MassagePage() {
               {options.length > 0 ? (
                 <div className="mp-prices">
                   <small className="muted">Стоимость</small>
-                  {options.map(([d, p]) => <div key={d} className="mp-prices__row"><span>{d}</span><strong>{p}</strong></div>)}
+                  {options.map((o) => (
+                    <div key={o.d} className="mp-prices__row">
+                      <span>{o.d}</span>
+                      <strong>{o.p}</strong>
+                      <a href={o.href} target="_blank" rel="noreferrer" data-track={`${m.title} · ${o.d}`} className="btn btn--primary btn--xs">Записаться</a>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <div className="mp-aside__price">
@@ -86,7 +105,7 @@ export default function MassagePage() {
                   <strong className="display">{m.price}</strong>
                 </div>
               )}
-              <a href={m.booking} target="_blank" rel="noreferrer" data-track={m.title} className="btn btn--primary">Записаться</a>
+              {options.length === 0 && <a href={m.booking} target="_blank" rel="noreferrer" data-track={m.title} className="btn btn--primary">Записаться</a>}
               <Link to="/contacts" className="btn btn--ghost">Задать вопрос</Link>
             </div>
           </aside>

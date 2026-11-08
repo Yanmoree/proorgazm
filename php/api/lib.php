@@ -5,9 +5,9 @@ declare(strict_types=1);
 date_default_timezone_set('Europe/Moscow');
 
 const FIELDS = [
-    'massages' => ['title' => 120, 'duration' => 40, 'price' => 40, 'tag' => 30, 'short' => 400, 'description' => 8000, 'options' => 2000, 'booking' => 500, 'image' => 300, 'gallery' => 'urls', 'faq' => 'faq', 'titleFirst' => 'bool'],
-    'masters' => ['name' => 120, 'role' => 60, 'exp' => 30, 'age' => 20, 'height' => 20, 'weight' => 20, 'bio' => 8000, 'booking' => 500, 'image' => 300, 'traits' => 'list', 'programs' => 'list', 'gallery' => 'urls', 'faq' => 'faq'],
-    'articles' => ['title' => 200, 'category' => 60, 'read' => 20, 'date' => 40, 'excerpt' => 500, 'body' => 50000, 'image' => 300, 'faq' => 'faq'],
+    'massages' => ['title' => 120, 'duration' => 40, 'price' => 40, 'tag' => 30, 'short' => 400, 'description' => 8000, 'options' => 2000, 'booking' => 500, 'image' => 300, 'gallery' => 'urls', 'faq' => 'faq', 'titleFirst' => 'bool', 'seoTitle' => 200, 'seoDescription' => 400],
+    'masters' => ['name' => 120, 'role' => 60, 'exp' => 30, 'age' => 20, 'height' => 20, 'weight' => 20, 'bio' => 8000, 'booking' => 500, 'image' => 300, 'traits' => 'list', 'programs' => 'list', 'gallery' => 'urls', 'faq' => 'faq', 'seoTitle' => 200, 'seoDescription' => 400],
+    'articles' => ['title' => 200, 'category' => 60, 'read' => 20, 'date' => 40, 'excerpt' => 500, 'body' => 50000, 'image' => 300, 'faq' => 'faq', 'seoTitle' => 200, 'seoDescription' => 400],
 ];
 const SESSION_TTL = 7 * 86400 * 1000;
 const UTC_OFFSET_SEC = 3 * 3600; // Москва, для группировки статистики по дням
@@ -352,4 +352,37 @@ function maybe_refresh_rating(): void
     if (now_ms() - (int) ($attempt['t'] ?? 0) < 3600 * 1000) return;
     save_setting('dikidi_attempt', ['t' => now_ms()]);
     refresh_rating(6);
+}
+
+// ---------- Обновления базы (php api/index.php migrate) ----------
+
+function migrate(): string
+{
+    $v = (int) (one("SELECT value FROM meta WHERE key = 'version'")['value'] ?? 1);
+    $done = [];
+    if ($v < 7) {
+        // Своя ссылка DIKIDI на каждую длительность; уже отредактированные в админке варианты не трогаем
+        $dk = fn($s) => "https://dikidi.net/536831?p=3.pi-po-ssm-sd&o=7&s=$s&rl=0_0";
+        $opts = [
+            'four-hands-massage' => "90 минут | 24 000 ₽ | 7049205\n120 минут | 32 000 ₽ | 21733555\n180 минут | 42 000 ₽ | 21733568\n240 минут | 52 000 ₽ | 21733582",
+            'massage-for-wife-with-husband' => "90 минут | 15 000 ₽ | 7050297\n120 минут | 19 000 ₽ | 8246530\n180 минут | 24 000 ₽ | 8246536\n240 минут | 29 000 ₽ | 8246540",
+        ];
+        db()->beginTransaction();
+        foreach ($opts as $slug => $options) {
+            $row = one("SELECT id, data FROM items WHERE collection = 'massages' AND slug = ?", [$slug]);
+            if (!$row) continue;
+            $data = json_decode($row['data'], true);
+            $lines = array_filter(explode("\n", (string) ($data['options'] ?? '')), 'trim');
+            foreach ($lines as $line) if (count(explode('|', $line)) > 2) continue 2;
+            $data['options'] = $options;
+            if ($slug === 'massage-for-wife-with-husband' && ($data['booking'] ?? '') === $dk(8246530)) $data['booking'] = $dk(7050297);
+            run('UPDATE items SET data = ?, updated_at = ? WHERE id = ?', [jenc($data), now_ms(), $row['id']]);
+            $done[] = $slug;
+        }
+        // Демо-статистика, попавшая в базу при создании
+        $done[] = 'demo events: ' . run("DELETE FROM events WHERE vid LIKE 'seed-%'")->rowCount();
+        run("INSERT OR REPLACE INTO meta (key, value) VALUES ('version', '7')");
+        db()->commit();
+    }
+    return $done ? 'v7: ' . implode(', ', $done) : 'база уже обновлена';
 }

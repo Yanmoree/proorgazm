@@ -272,7 +272,16 @@
 
 /* ================= PRICES / CONTACTS ================= */
 .mp-prices { display: grid; gap: 4px; }
-.mp-prices__row { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.mp-prices__row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.mp-prices__row .btn--xs { grid-column: 1 / -1; }
+.mp-prices__row span, .mp-prices__row strong { white-space: nowrap; }
+@media (min-width: 380px) {
+  .mp-prices__row { grid-template-columns: 1fr auto auto; }
+  .mp-prices__row .btn--xs { grid-column: auto; }
+}
+.btn--xs { min-height: 34px; padding: 0 14px; font-size: 13px; }
+.mp-hero__book { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; }
+.mp-hero__book small { width: 100%; }
 .mp-prices__row:last-child { border-bottom: 0; }
 .mp-prices__row strong { font-weight: 700; }
 .contact-card__sub { color: var(--pink-3); font-size: 14px; font-weight: 600; }

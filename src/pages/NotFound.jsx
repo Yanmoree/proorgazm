@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useSeo, pageSeo } from '../lib/seo.js'
 
 export default function NotFound() {
+  useSeo({ ...pageSeo('notFound'), noindex: true })
   return (
     <section className="not-found">
       <div className="glow glow--violet" style={{ width: 500, height: 500, top: '20%', left: '30%' }} />

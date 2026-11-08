@@ -6,11 +6,12 @@ import { ArticleCard } from '../components/Cards.jsx'
 import Faq from '../components/Faq.jsx'
 import { useSite } from '../lib/content.jsx'
 import { scrollToTop } from '../lib/smooth.js'
+import { useSeo, pageSeo } from '../lib/seo.js'
 
 const PER_PAGE = 9
 
 export default function Blog() {
-  const { articles, faq } = useSite()
+  const { articles, faq, settings } = useSite()
   const [params, setParams] = useSearchParams()
   const cats = ['Все', ...new Set(articles.map((a) => a.category))]
   const cat = cats.includes(params.get('category')) ? params.get('category') : 'Все'
@@ -18,6 +19,8 @@ export default function Blog() {
   const pages = Math.max(1, Math.ceil(list.length / PER_PAGE))
   const page = Math.min(pages, Math.max(1, Number(params.get('page')) || 1))
   const shown = list.slice((page - 1) * PER_PAGE, page * PER_PAGE)
+  const seo = pageSeo('blog', settings, page)
+  useSeo(cat === 'Все' ? seo : { ...seo, title: `${cat} — ${seo.title}` })
 
   // Ссылка на страницу N с сохранением рубрики; первая страница — без ?page
   const href = (n) => {

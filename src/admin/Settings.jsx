@@ -37,9 +37,21 @@ const groups = [
     { key: 'masters', label: 'Страница «Мастера»', type: 'faq' },
     { key: 'blog', label: 'Страница «Блог»', type: 'faq' },
   ] },
-  { key: 'seo', title: 'SEO', fields: [
-    { key: 'title', label: 'Заголовок вкладки' },
-    { key: 'description', label: 'Описание для поисковиков', type: 'textarea', rows: 3 },
+  { key: 'seo', title: 'SEO: главная страница', fields: [
+    { key: 'title', label: 'Title', hint: 'До ~60 символов. Пусто — стандартный' },
+    { key: 'description', label: 'Description', type: 'textarea', rows: 3, hint: 'До ~160 символов' },
+  ] },
+  { key: 'seoPages', title: 'SEO: страницы-разделы', fields: [
+    { key: 'massagesTitle', label: 'Title страницы «Массажи»', half: true },
+    { key: 'massagesDescription', label: 'Description страницы «Массажи»', half: true, type: 'textarea', rows: 2 },
+    { key: 'mastersTitle', label: 'Title страницы «Мастера»', half: true },
+    { key: 'mastersDescription', label: 'Description страницы «Мастера»', half: true, type: 'textarea', rows: 2 },
+    { key: 'blogTitle', label: 'Title страницы «Блог»', half: true },
+    { key: 'blogDescription', label: 'Description страницы «Блог»', half: true, type: 'textarea', rows: 2 },
+    { key: 'reviewsTitle', label: 'Title страницы «Отзывы»', half: true },
+    { key: 'reviewsDescription', label: 'Description страницы «Отзывы»', half: true, type: 'textarea', rows: 2 },
+    { key: 'contactsTitle', label: 'Title страницы «Контакты»', half: true },
+    { key: 'contactsDescription', label: 'Description страницы «Контакты»', half: true, type: 'textarea', rows: 2 },
   ] },
 ]
 

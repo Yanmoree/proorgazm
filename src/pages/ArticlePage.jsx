@@ -7,6 +7,7 @@ import CtaBand from '../components/CtaBand.jsx'
 import { useSite, useArticle } from '../lib/content.jsx'
 import RichText from '../components/RichText.jsx'
 import NotFound from './NotFound.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 export default function ArticlePage() {
   const { slug } = useParams()
@@ -14,6 +15,7 @@ export default function ArticlePage() {
   const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 25 })
   const { articles } = useSite()
   const { article: a, loading, missing } = useArticle(slug)
+  useSeo(a ? itemSeo('articles', a) : {})
   if (missing || (!a && !loading)) return <NotFound />
   if (!a) return <div className="article__head container article__loading">Загрузка…</div>
   const related = articles.filter((x) => x.slug !== slug).slice(0, 3)

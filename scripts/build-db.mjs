@@ -9,6 +9,8 @@ process.env.DB_PATH = out
 const { db } = await import('../server/db.js')
 const { refreshRatingStats } = await import('../server/dikidi.js')
 console.log('DIKIDI:', await refreshRatingStats())
+// Демо-статистика из seed() для локальной разработки — на боевом сайте не нужна
+db.exec('DELETE FROM events')
 // Один файл без -wal/-shm: так его проще залить на хостинг
 db.exec('PRAGMA wal_checkpoint(TRUNCATE); PRAGMA journal_mode = DELETE;')
 db.close()

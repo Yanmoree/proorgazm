@@ -12,6 +12,7 @@ import CtaBand from '../components/CtaBand.jsx'
 import { MassageCard, MasterCard, ReviewCard, ArticleCard } from '../components/Cards.jsx'
 import { useSite, ratingsLabel } from '../lib/content.jsx'
 import { features } from '../data/site.js'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -40,7 +41,8 @@ function SplitWords({ text, className }) {
 }
 
 export default function Home() {
-  const { DIKIDI, DIKIDI_CONSULT, massages, masters, reviews, articles, hero, photos, contacts, ratings, rating } = useSite()
+  const { DIKIDI, DIKIDI_CONSULT, massages, masters, reviews, articles, hero, photos, contacts, ratings, rating, settings } = useSite()
+  useSeo(pageSeo('home', settings))
   const place = `${contacts.address.replace(/^Москва,\s*/, '')} (${contacts.metro})`
   const root = useRef(null)
 

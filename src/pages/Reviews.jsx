@@ -5,9 +5,11 @@ import CtaBand from '../components/CtaBand.jsx'
 import { ReviewForm } from '../components/Forms.jsx'
 import Stars from '../components/Stars.jsx'
 import { useSite, ratingsLabel } from '../lib/content.jsx'
+import { useSeo, pageSeo, itemSeo } from '../lib/seo.js'
 
 export default function Reviews() {
-  const { DIKIDI_REVIEWS, reviews, masters, ratings, rating } = useSite()
+  const { DIKIDI_REVIEWS, reviews, masters, ratings, rating, settings } = useSite()
+  useSeo(pageSeo('reviews', settings))
   return (
     <>
       <PageHero

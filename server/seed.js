@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { SLUG_RENAMES, legacyRedirect } from '../src/lib/routes.js'
-import { DIKIDI, DIKIDI_REVIEWS, DIKIDI_CONSULT, DIKIDI_TRAINING, contacts, massages, masters, reviews, articles, photos, pageFaq } from '../src/data/site.js'
+import { dk, DIKIDI, DIKIDI_REVIEWS, DIKIDI_CONSULT, DIKIDI_TRAINING, contacts, massages, masters, reviews, articles, photos, pageFaq } from '../src/data/site.js'
 
 // Полные тексты статей лежат рядом со статикой, чтобы их видел и сайт без API (Surge)
 const ARTICLES_DIR = fileURLToPath(new URL('../public/content/articles/', import.meta.url))
@@ -224,4 +224,20 @@ export function seed(db) {
     }
   }
   db.exec('COMMIT')
+}
+
+// v7: у программ с несколькими длительностями — своя ссылка DIKIDI на каждый вариант.
+// Варианты, уже отредактированные в админке (с третьей частью), не трогаем
+export function migrateV7(db) {
+  const upd = db.prepare('UPDATE items SET data = ?, updated_at = ? WHERE id = ?')
+  for (const row of db.prepare("SELECT id, slug, data FROM items WHERE collection = 'massages'").all()) {
+    const src = massages.find((m) => m.slug === row.slug)
+    if (!src || !src.options) continue
+    const data = JSON.parse(row.data)
+    const lines = String(data.options || '').split('\n').filter((l) => l.trim())
+    if (lines.some((l) => l.split('|').length > 2)) continue
+    data.options = src.options
+    if (row.slug === 'massage-for-wife-with-husband' && data.booking === dk(8246530)) data.booking = src.booking
+    upd.run(JSON.stringify(data), Date.now(), row.id)
+  }
 }

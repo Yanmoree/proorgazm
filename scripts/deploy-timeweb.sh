@@ -14,7 +14,8 @@ DIR="${DEPLOY_DIR:-pro-orgazm.ru}"
 SSH=(ssh -o BatchMode=yes "$HOST")
 
 npm run build
-cp -R php/api php/uploads php/legacy.php dist/
+cp -R php/api php/uploads php/legacy.php php/sitemap.php dist/
+cp src/lib/seo-defaults.json dist/
 node scripts/legacy-map.mjs dist/legacy-map.json
 
 if [[ "${1:-}" == "--init-db" ]]; then
@@ -47,4 +48,7 @@ COPYFILE_DISABLE=1 tar czf - -C dist . | "${SSH[@]}" "set -e
   rm -rf public_html.old
   chmod 600 config.php"
 
-echo "Готово: http://$DIR/"
+# Обновления схемы базы (идемпотентно)
+"${SSH[@]}" "cd ~/$DIR/public_html && php api/index.php migrate"
+
+echo "Готово: https://$DIR/"

@@ -13,6 +13,7 @@ require __DIR__ . '/lib.php';
 // Запуск из консоли/cron: php index.php refresh-rating
 if (PHP_SAPI === 'cli') {
     if (($argv[1] ?? '') === 'refresh-rating') { var_export(refresh_rating()); echo "\n"; }
+    if (($argv[1] ?? '') === 'migrate') { echo migrate(), "\n"; }
     exit;
 }
 

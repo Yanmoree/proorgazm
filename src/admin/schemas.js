@@ -15,10 +15,12 @@ export const schemas = {
       { key: 'booking', label: 'Ссылка DIKIDI', half: true },
       { key: 'short', label: 'Краткое описание', type: 'textarea', rows: 3 },
       { key: 'description', label: 'Полное описание', type: 'textarea', rows: 8, hint: 'Абзацы разделяйте пустой строкой' },
-      { key: 'options', label: 'Варианты длительности и цены', type: 'textarea', rows: 4, hint: 'По строке на вариант: 90 минут | 24 000 ₽. Пусто — показывается одна цена' },
+      { key: 'options', label: 'Варианты длительности и цены', type: 'textarea', rows: 4, hint: 'По строке на вариант: 90 минут | 24 000 ₽ | номер услуги или ссылка DIKIDI. У каждого варианта на странице своя кнопка «Записаться». Пусто — одна цена и общая ссылка' },
       { key: 'faq', label: 'Вопрос-ответ', type: 'faq', hint: 'Блок показывается на странице, если есть хотя бы один вопрос' },
       { key: 'gallery', label: 'Фото программы', type: 'gallery', hint: 'Необязательно. Если есть, первое фото — обложка карточки, все фото — галерея на странице программы' },
       { key: 'titleFirst', label: 'На карточке сначала название, потом длительность', type: 'checkbox', hint: 'Выключено — крупно длительность («240 минут»), под ней название' },
+      { key: 'seoTitle', label: 'SEO: title (заголовок в поиске и вкладке)', hint: 'До ~60 символов. Пусто — по шаблону: «Название — эротический массаж 120 минут | ProOrgazm»' },
+      { key: 'seoDescription', label: 'SEO: description (описание в поиске)', type: 'textarea', rows: 3, hint: 'До ~160 символов. Пусто — берётся из краткого описания' },
     ],
   },
   masters: {
@@ -41,6 +43,8 @@ export const schemas = {
       { key: 'programs', label: 'Программы мастера', type: 'programs' },
       { key: 'faq', label: 'Вопрос-ответ', type: 'faq', hint: 'Блок показывается на странице, если есть хотя бы один вопрос' },
       { key: 'gallery', label: 'Фото мастера', type: 'gallery', hint: 'Первое фото — обложка карточки. Порядок меняется перетаскиванием или стрелками' },
+      { key: 'seoTitle', label: 'SEO: title (заголовок в поиске и вкладке)', hint: 'До ~60 символов. Пусто — по шаблону: «Имя — мастер эротического массажа | ProOrgazm»' },
+      { key: 'seoDescription', label: 'SEO: description (описание в поиске)', type: 'textarea', rows: 3, hint: 'До ~160 символов. Пусто — берётся из текста «О мастере»' },
     ],
   },
   articles: {
@@ -58,6 +62,8 @@ export const schemas = {
       { key: 'excerpt', label: 'Анонс', type: 'textarea', rows: 2 },
       { key: 'body', label: 'Текст статьи', type: 'textarea', rows: 18, hint: '## подзаголовок · - пункт списка · > цитата · пустая строка — новый абзац' },
       { key: 'image', label: 'Обложка', type: 'image' },
+      { key: 'seoTitle', label: 'SEO: title (заголовок в поиске и вкладке)', hint: 'До ~60 символов. Пусто — по шаблону: «Заголовок | ProOrgazm»' },
+      { key: 'seoDescription', label: 'SEO: description (описание в поиске)', type: 'textarea', rows: 3, hint: 'До ~160 символов. Пусто — берётся из анонса' },
     ],
   },
 }
