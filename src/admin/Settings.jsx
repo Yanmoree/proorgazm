@@ -4,9 +4,9 @@ import { Field } from './Fields.jsx'
 
 const groups = [
   { key: 'hero', title: 'Главный экран', fields: [
-    { key: 'eyebrow', label: 'Надзаголовок' },
-    { key: 'title', label: 'Заголовок', half: true },
-    { key: 'accent', label: 'Акцент (розовым)', half: true },
+    { key: 'eyebrow', label: 'Заголовок H1 главной', hint: 'Главный заголовок страницы для поисковиков: «Салон эротического массажа для женщин в Москве»' },
+    { key: 'title', label: 'Слоган', half: true },
+    { key: 'accent', label: 'Слоган, акцент (розовым)', half: true },
     { key: 'subtitle', label: 'Подзаголовок', type: 'textarea', rows: 3 },
   ] },
   { key: 'contacts', title: 'Контакты', fields: [

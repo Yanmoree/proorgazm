@@ -20,7 +20,8 @@
 
 .hero__inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: center; }
 .hero__content { display: grid; gap: 28px; }
-.hero__title { font-size: var(--fs-hero); line-height: 1.02; }
+.hero__title { font-size: var(--fs-hero); line-height: 1.02; margin: 0; }
+.hero__h1 { margin: 0; line-height: 1.4; }
 .split-word { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0.14em 0.16em 0.04em; margin: -0.06em -0.14em -0.16em -0.04em; }
 .split-inner { display: inline-block; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }

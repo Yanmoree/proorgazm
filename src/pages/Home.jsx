@@ -94,12 +94,13 @@ export default function Home() {
 
         <div className="container hero__inner">
           <div className="hero__content">
-            <span className="eyebrow hero__meta">{hero.eyebrow}</span>
-            <h1 className="display hero__title">
+            {/* H1 страницы — «Салон эротического массажа для женщин в Москве», слоган под ним — оформление */}
+            <h1 className="eyebrow hero__meta hero__h1">{hero.eyebrow}</h1>
+            <p className="display hero__title">
               <SplitWords text={hero.title} />
               <br />
               <SplitWords text={hero.accent} className="gradient-text italic" />
-            </h1>
+            </p>
             <p className="lead hero__sub">
               {hero.subtitle}
             </p>
